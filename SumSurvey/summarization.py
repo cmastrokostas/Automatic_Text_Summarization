@@ -43,11 +43,11 @@ def summarization(lang_path):
             parser = PlaintextParser.from_file(dir,Tokenizer(language))
             for summarizer in summarizers:  
                 summary = summarizers[summarizer](parser.document,n_sentences)
-                item = {f"{summarizer} Summarizer": summary}
+                item = {f" {summarizer} Summarizer": summary}
                 summaries.append(item)
 
     #with open ('json_summaries.json','w', encoding='utf8') as json_file:                       
-    #    json.dumps(summaries,json_file, ensure_ascii=False, indent = 4, separators = (',', ':'))
+    #    json.dump(summaries,json_file, ensure_ascii=False, indent = 4, separators = (',', ':'))
     
     # Seems to work but Cant use json.dump because of type <sentence> in created summary 
         return(summaries)

@@ -12,8 +12,10 @@ def main():
         
     
         if (inp == 1 or inp == 2 ):
+
             print(summarization(languages[inp]))
-            print("Process Done Check File !")
+
+            #print("Process Done Check File !")
             
             break
         else :
