@@ -1,6 +1,6 @@
 # Unsupervised Text Summarization Survey 
 
-This repository hosts code for my thesis on "Unsupervised Text Summarization on Modern Greek Textual Corpora "
+This repository hosts code for my thesis on " Unsupervised Text Summarization on Modern Greek Textual Corpora "
 
 
 ## Datasets
