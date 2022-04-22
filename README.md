@@ -7,7 +7,7 @@ This repository hosts code for my thesis on "Unsupervised Text Summarization on 
 Available in [this link]()
 
 ##Results
-Configure `SumSurvey\config.py` and run `SumSurvey.py`.
+Configure `SumSurvey\config.py` and run `main.py`.
 
 ## Installation
 * `Python 3` (min. version 3.9), `pip3` (& `py` launcher Windows-only).
