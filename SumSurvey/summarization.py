@@ -1,9 +1,7 @@
 
 import sumy
 import pytextrank
-import spacy 
 import os
-import string 
 import json
 
 from SumSurvey.config import multiling_path, output_path , body_path, el_path ,en_path, n_sentences
@@ -14,7 +12,6 @@ from sumy.summarizers.luhn import LuhnSummarizer
 from sumy.summarizers.lsa import LsaSummarizer
 from sumy.summarizers.text_rank import TextRankSummarizer
 
-from os.path import isfile # str join 
 
 summarizers = {'LexRank': LexRankSummarizer(),'TextRank': TextRankSummarizer() ,'Luhn': LuhnSummarizer(),'Lsa': LsaSummarizer()}
 
