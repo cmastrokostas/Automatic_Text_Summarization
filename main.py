@@ -1,4 +1,4 @@
-from SumSurvey.summarization import summarization
+from SumSurvey.summarization import summarization,evaluation
 from SumSurvey.config import en_path, el_path
 
 def main():
@@ -7,6 +7,7 @@ def main():
 
     for lang in languages : 
         summarization(languages[lang])
+        evaluation(languages[lang])
 
     print("Done...")
     return
