@@ -5,7 +5,7 @@ import json
 import rouge
 
 from rouge import Rouge
-from SumSurvey.config import multiling_path, body_path, summary_path, el_path, en_path, n_sentences
+from SumSurvey.config import multiling_path, body_path, summary_path, el_path, en_path, n_sentences, output_path
 from sumy.parsers.plaintext import PlaintextParser
 from sumy.nlp.tokenizers import Tokenizer
 from sumy.summarizers.lex_rank import LexRankSummarizer
@@ -56,9 +56,10 @@ def summarization(lang_path):
             files_set.append({f"{text_file}":items})
 
     # Store the results in a new file.
-    with open (f"{language}_json_summaries.json",'w', encoding = 'utf8') as json_file:                       
+    with open (os.path.join(output_path, f"{language}_json_summaries.json"), 'w', encoding = 'utf8') as json_file:                       
         json.dump(files_set,json_file, ensure_ascii=False, indent = 4, separators = (',', ':'))
     return
+
 
 def evaluation(lang_path):
     # Choose the proper language for the path setup.
@@ -80,7 +81,7 @@ def evaluation(lang_path):
     # Iterate through summary files. 
     for summary_file in summary_files : 
         file_set = []
-        with open (os.path.join(ref_path,summary_file),'r', encoding = 'utf-8-sig', errors = 'ignore') as file:
+        with open (os.path.join(ref_path,summary_file), 'r', encoding = 'utf-8-sig', errors = 'ignore') as file:
             refs = file.read()
         hyp_name = summary_file.replace(str("_summary"),"_body") # Format name properly.
         j = 0
@@ -100,6 +101,6 @@ def evaluation(lang_path):
         i += 1
 
     # Store the results in a new file.
-    with open (f"{language}_scores.json",'w', encoding = 'utf8') as json_file:                       
+    with open (os.path.join(output_path, f"{language}_scores.json"),'w', encoding = 'utf8') as json_file:                       
         json.dump(files_set,json_file, ensure_ascii=False, indent = 4, separators = (',', ':'))
     return 
