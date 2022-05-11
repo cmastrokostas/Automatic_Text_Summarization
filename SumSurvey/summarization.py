@@ -3,41 +3,21 @@ import pytextrank
 import os
 import json
 import rouge
+import spacy 
 
 from rouge import Rouge
-from SumSurvey.config import multiling_path, body_path, summary_path, results_path, en_path, n_sentences, summaries_file
+from SumSurvey.config import multiling_path, body_path, baseline_path, summary_path, results_path, en_path, n_sentences, summaries_file, sumy_summarizers, pytextrank_summarizers
 from sumy.parsers.plaintext import PlaintextParser
 from sumy.nlp.tokenizers import Tokenizer
-from sumy.summarizers.lex_rank import LexRankSummarizer
-from sumy.summarizers.luhn import LuhnSummarizer
-from sumy.summarizers.lsa import LsaSummarizer
-from sumy.summarizers.text_rank import TextRankSummarizer
-
-summarizers = { 
-    'LexRank': LexRankSummarizer(),
-    'TextRank': TextRankSummarizer(),
-    'Luhn': LuhnSummarizer(),
-    'Lsa': LsaSummarizer(),
-    #'pyTextRank': 'pyTextRank()'
-}
-
-spacy_objects = 0 
-def pyTextRank(parser.document, n_sentences):
-    # join sentences in str 
-    
 
 
+def summarization(language, lang_path):
 
-
-def summarization(lang_path):
-    # Choose the proper language for the path setup.
-    language = 'english' if lang_path == en_path else 'greek'
-
-    path = os.path.join(multiling_path, body_path, lang_path)
+    path = os.path.join(multiling_path, baseline_path, lang_path)
 
     # Make a List of text files in the wanted file directory.
     text_files = os.listdir(path)
-   
+
     # Initialize empty set of summaries for all files.
     files_set = []
     
@@ -46,13 +26,22 @@ def summarization(lang_path):
 
         # PlaintextParser converts the document in the proper form to be summarized.
         parser = PlaintextParser.from_file(os.path.join(path, text_file), Tokenizer(language))
-            
-        # Produce summaries from each algorithm.
-        summaries = {
+        
+        # Produce summaries for sumy algorithms.
+        sumy_summaries = {
             summarizer: ' '.join([
-                str(sent) for sent in summarizers[summarizer](parser.document, n_sentences)
-            ]) for summarizer in summarizers
-        } 
+                str(sent) for sent in sumy_summarizers[summarizer](parser.document, n_sentences)
+            ]) for summarizer in sumy_summarizers
+        }
+
+        file_text = ''.join([str(sentence) for sentence in parser.document.sentences])
+
+        # Produce summaries for pyTextRank algorithms.
+        spacy_summaries = {
+            summarizer: (pyTextRank(file_text, pytextrank_summarizers[summarizer], language)) for summarizer in pytextrank_summarizers
+        }
+        # Join Dictionaries
+        summaries = sumy_summaries|spacy_summaries
 
         # Add each file's results in the set for all the files.
         files_set.append({text_file: summaries})
@@ -63,7 +52,7 @@ def summarization(lang_path):
     return
 
 
-def evaluation(lang_path):
+def evaluation(language, lang_path):
 
     # Choose the proper language for the path setup.
     language = 'english' if lang_path == en_path else 'greek'
@@ -82,16 +71,16 @@ def evaluation(lang_path):
         hypotheses_list = json.load(file)
     
     files_set = []
-    # Iterate through summary files. 
+    # Iterate through summary files.
     for summary_file, hypothesis in zip(summary_files, hypotheses_list): 
         with open (os.path.join(ref_path, summary_file), 'r', encoding = 'utf-8-sig', errors = 'ignore') as file:
             reference = file.read()
 
-        hyp_file = summary_file.replace("_summary", "_body")
+        hyp_file = summary_file.replace("_summary", "_baseline")
         file_set = {
             summarizer: rouge.get_scores(hypothesis[hyp_file][summarizer], reference)[0] 
-            for summarizer in summarizers
-        } 
+            for summarizer in sumy_summarizers|pytextrank_summarizers
+        }
         
         # Add each file's results in the set for all the files.
         files_set.append({summary_file.replace("_summary.txt","_body.txt"): file_set})
@@ -99,4 +88,17 @@ def evaluation(lang_path):
     # Store the results in a new file.
     with open (os.path.join(results_path, f"{language}_scores.json"),'w', encoding = 'utf8') as json_file:                       
         json.dump(files_set,json_file, ensure_ascii = False, indent = 4, separators = (',', ':'))
-    return 
+    return
+
+
+def pyTextRank(text, summarizer, language):
+
+    # Choose proper language model
+    nlp = spacy.load("el_core_news_sm") if language == "greek" else spacy.load("en_core_web_sm")
+
+    # Summarization pipeline
+    nlp.add_pipe(factory_name = summarizer, name = summarizer, last = True)
+    doc = nlp(text)
+    summary = ''.join([str(sent) for sent in doc._.textrank.summary(limit_sentences = n_sentences)]) # Join sentences
+
+    return summary
