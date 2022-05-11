@@ -4,7 +4,7 @@ This repository hosts code for my thesis on " Unsupervised Text Summarization on
 
 
 ## Datasets
-Available in [this link]()
+Available in [this link](http://multiling.iit.demokritos.gr/pages/view/1571/datasets)
 
 ## Results
 Configure `SumSurvey\config.py` and run `main.py`.
