@@ -34,7 +34,7 @@ def summarization(language, lang_path):
             ]) for summarizer in sumy_summarizers
         }
 
-        file_text = ''.join([str(sentence) for sentence in parser.document.sentences])
+        file_text = ' '.join([str(sentence) for sentence in parser.document.sentences])
 
         # Produce summaries for pyTextRank algorithms.
         spacy_summaries = {
@@ -99,6 +99,6 @@ def pyTextRank(text, summarizer, language):
     # Summarization pipeline
     nlp.add_pipe(factory_name = summarizer, name = summarizer, last = True)
     doc = nlp(text)
-    summary = ''.join([str(sent) for sent in doc._.textrank.summary(limit_sentences = n_sentences)]) # Join sentences
+    summary = ' '.join([str(sent) for sent in doc._.textrank.summary(limit_sentences = n_sentences)]) # Join sentences
 
     return summary
