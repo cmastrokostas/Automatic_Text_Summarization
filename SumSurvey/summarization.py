@@ -29,7 +29,7 @@ def summarization(language, lang_path):
 
         # PlaintextParser converts the document in the proper form to be summarized.
         parser = PlaintextParser.from_file(os.path.join(path, text_file), Tokenizer(language))
-        
+
         # Produce summaries for sumy algorithms.
         sumy_summaries = {
             summarizer: ' '.join([
@@ -82,14 +82,19 @@ def evaluation(language, lang_path):
             reference = file.read()
 
         hyp_file = summary_file.replace("_summary", "_baseline")
-        
-        file_set = {
-            summarizer: {rouge.get_scores(str(hypothesis[hyp_file][summarizer]), reference[0])[0] |\
-            {hug: huggingface_metrics[hug].compute(predictions = [hypothesis[hyp_file][summarizer]], references = [reference]) for hug in huggingface_metrics}
-            }for summarizer in sumy_summarizers | pytextrank_summarizers
-        }
-            
 
+        # Metrics Included
+        file_set = {
+            summarizer: rouge.get_scores(hypothesis[hyp_file][summarizer], reference)[0]|{\
+                "rouge-hf": load_metric('rouge').compute(predictions = [hypothesis[hyp_file][summarizer]], references = [reference]),
+                "ter": load_metric('ter').compute(predictions = [hypothesis[hyp_file][summarizer]], references = [[reference]], case_sensitive=True),
+                "bleu": load_metric("bleu").compute(predictions = [(hypothesis[hyp_file][summarizer]).split()], references = [[reference.split()]]),
+                "sacrebleu": load_metric('sacrebleu').compute(predictions = [hypothesis[hyp_file][summarizer]], references = [[reference]]),
+                "bleurt": load_metric("bleurt").compute(predictions = [hypothesis[hyp_file][summarizer]], references = [[reference]])
+                }
+            for summarizer in sumy_summarizers | pytextrank_summarizers
+        }
+        
         # Add each file's results in the set for all the files.
         files_set.append({summary_file.replace("_summary.txt","_body.txt"): file_set})
 

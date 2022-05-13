@@ -35,8 +35,8 @@ pytextrank_summarizers = {
 
 huggingface_metrics = {
     "rouge-hf":load_metric("rouge"),
-    "ter" : load_metric("ter"),
-    "blue": load_metric('bleu'),
     "sacreblue": load_metric('sacrebleu'),
-    "bleurt": load_metric('bleurt')
+    "blue": load_metric('bleu'),
+    "bleurt": load_metric('bleurt'),
+    "ter": load_metric('ter')
 }
