@@ -3,17 +3,20 @@ from sumy.summarizers.luhn import LuhnSummarizer
 from sumy.summarizers.lsa import LsaSummarizer
 from sumy.summarizers.text_rank import TextRankSummarizer
 
-multiling_path = r'C:\Users\Charalampos\source\repos\Unsupervised_Text_Summarization_Survey\datasets\MultiLingPilot2013'
+from datasets import load_metric
+
+multiling_path = r'C:\Users\Charalampos\source\repos\Unsupervised_Text_Summarization_Survey\my_datasets\MultiLingPilot2013'
 results_path = r'C:\Users\Charalampos\source\repos\Unsupervised_Text_Summarization_Survey\Results'
-body_path = r'body\text'
-baseline_path = 'baseline'
-summary_path = 'summary'
+
+baseline_path = 'baseline' # Original Text Directory.
+summary_path = 'summary' # Human Generated Summaries.
+
 el_path = 'el'
 en_path = 'en'
 
 summaries_file = "json_summaries.json"
 debug = False
-n_sentences = 3
+n_sentences = 5
 
 sumy_summarizers = { 
     'LexRank': LexRankSummarizer(),
@@ -28,4 +31,12 @@ pytextrank_summarizers = {
     'PositionRank' : 'positionrank',
     'BiasedRank' : 'biasedtextrank',
     'TopicRank' : 'topicrank'
+}
+
+huggingface_metrics = {
+    "rouge-hf":load_metric("rouge"),
+    "ter" : load_metric("ter"),
+    "blue": load_metric('bleu'),
+    "sacreblue": load_metric('sacrebleu'),
+    "bleurt": load_metric('bleurt')
 }

@@ -5,15 +5,18 @@ import json
 import rouge
 import spacy 
 
+
 from rouge import Rouge
-from SumSurvey.config import multiling_path, body_path, baseline_path, summary_path, results_path, en_path, n_sentences, summaries_file, sumy_summarizers, pytextrank_summarizers
+from SumSurvey.config import multiling_path, baseline_path, summary_path, results_path, en_path, summaries_file
+from SumSurvey.config import n_sentences, sumy_summarizers, pytextrank_summarizers, huggingface_metrics
 from sumy.parsers.plaintext import PlaintextParser
 from sumy.nlp.tokenizers import Tokenizer
+from datasets import load_metric
 
 
 def summarization(language, lang_path):
 
-    path = os.path.join(multiling_path, baseline_path, lang_path)
+    path = os.path.join(multiling_path, lang_path, baseline_path)
 
     # Make a List of text files in the wanted file directory.
     text_files = os.listdir(path)
@@ -34,12 +37,14 @@ def summarization(language, lang_path):
             ]) for summarizer in sumy_summarizers
         }
 
-        file_text = ' '.join([str(sentence) for sentence in parser.document.sentences])
+        with open(os.path.join(path, text_file), 'r', encoding = 'utf-8-sig', errors = 'ignore') as file:
+            file1 = file.read().replace("\n"," ")  # file_text = ' '.join([str(sentence) for sentence in parser.document.sentences])
 
         # Produce summaries for pyTextRank algorithms.
         spacy_summaries = {
-            summarizer: (pyTextRank(file_text, pytextrank_summarizers[summarizer], language)) for summarizer in pytextrank_summarizers
+            summarizer: (pyTextRank(file1, pytextrank_summarizers[summarizer], language)) for summarizer in pytextrank_summarizers
         }
+
         # Join Dictionaries
         summaries = sumy_summaries|spacy_summaries
 
@@ -59,7 +64,7 @@ def evaluation(language, lang_path):
     
     # Hypothesis path (machine generated) & Reference path (author assigned) summaries. 
     hyp_path = os.path.join(results_path, f"{language}_{summaries_file}")
-    ref_path = os.path.join(multiling_path, summary_path, lang_path)
+    ref_path = os.path.join(multiling_path, lang_path, summary_path)
 
     # Make a List of text files in the wanted file directory.
     summary_files = os.listdir(ref_path)
@@ -77,11 +82,14 @@ def evaluation(language, lang_path):
             reference = file.read()
 
         hyp_file = summary_file.replace("_summary", "_baseline")
-        file_set = {
-            summarizer: rouge.get_scores(hypothesis[hyp_file][summarizer], reference)[0] 
-            for summarizer in sumy_summarizers|pytextrank_summarizers
-        }
         
+        file_set = {
+            summarizer: {rouge.get_scores(str(hypothesis[hyp_file][summarizer]), reference[0])[0] |\
+            {hug: huggingface_metrics[hug].compute(predictions = [hypothesis[hyp_file][summarizer]], references = [reference]) for hug in huggingface_metrics}
+            }for summarizer in sumy_summarizers | pytextrank_summarizers
+        }
+            
+
         # Add each file's results in the set for all the files.
         files_set.append({summary_file.replace("_summary.txt","_body.txt"): file_set})
 
