@@ -7,12 +7,14 @@ import spacy
 
 
 from rouge import Rouge
-from SumSurvey.config import multiling_path, baseline_path, summary_path, results_path, en_path, summaries_file
-from SumSurvey.config import n_sentences, sumy_summarizers, pytextrank_summarizers, huggingface_metrics
+from SumSurvey.config import multiling_path, baseline_path, summary_path, results_path, en_path, summaries_file, huggingface_metrics
+from SumSurvey.config import n_sentences, sumy_summarizers, pytextrank_summarizers
 from sumy.parsers.plaintext import PlaintextParser
 from sumy.nlp.tokenizers import Tokenizer
 from datasets import load_metric
 
+greek_nlp = spacy.load("el_core_news_sm")
+english_nlp = spacy.load("en_core_web_sm")
 
 def summarization(language, lang_path):
 
@@ -52,7 +54,7 @@ def summarization(language, lang_path):
         files_set.append({text_file: summaries})
 
     # Store the results in a new file.
-    with open (os.path.join(results_path, f"{language}_{summaries_file}"), 'w', encoding = 'utf-8-sig', errors = 'ignore') as json_file:                       
+    with open(os.path.join(results_path, f"{language}_{summaries_file}"), 'w', encoding = 'utf-8-sig', errors = 'ignore') as json_file:                       
         json.dump(files_set, json_file, ensure_ascii = False, indent = 4, separators = (',', ': '))
     return
 
@@ -78,28 +80,27 @@ def evaluation(language, lang_path):
     files_set = []
     # Iterate through summary files.
     for summary_file, hypothesis in zip(summary_files, hypotheses_list): 
-        with open (os.path.join(ref_path, summary_file), 'r', encoding = 'utf-8-sig', errors = 'ignore') as file:
+        with open(os.path.join(ref_path, summary_file), 'r', encoding = 'utf-8-sig', errors = 'ignore') as file:
             reference = file.read()
 
         hyp_file = summary_file.replace("_summary", "_baseline")
 
         # Metrics Included
         file_set = {
-            summarizer: rouge.get_scores(hypothesis[hyp_file][summarizer], reference)[0]|{\
-                "rouge-hf": load_metric('rouge').compute(predictions = [hypothesis[hyp_file][summarizer]], references = [reference]),
-                "ter": load_metric('ter').compute(predictions = [hypothesis[hyp_file][summarizer]], references = [[reference]], case_sensitive=True),
-                "bleu": load_metric("bleu").compute(predictions = [(hypothesis[hyp_file][summarizer]).split()], references = [[reference.split()]]),
-                "sacrebleu": load_metric('sacrebleu').compute(predictions = [hypothesis[hyp_file][summarizer]], references = [[reference]]),
-                "bleurt": load_metric("bleurt").compute(predictions = [hypothesis[hyp_file][summarizer]], references = [[reference]])
+            summarizer:{
+                "rouge-hf": huggingface_metrics["rouge"].compute(predictions = [hypothesis[hyp_file][summarizer]], references = [reference]),
+                "bleu-1": huggingface_metrics["bleu"].compute(predictions = [(hypothesis[hyp_file][summarizer]).split()], references = [[reference.split()]], max_order = 1),
+                "sacrebleu": huggingface_metrics["sacrebleu"].compute(predictions = [hypothesis[hyp_file][summarizer]], references = [[reference]]),
+                "bleurt": huggingface_metrics["bleurt"].compute(predictions = [hypothesis[hyp_file][summarizer]], references = [[reference]])
                 }
-            for summarizer in sumy_summarizers | pytextrank_summarizers
+            for summarizer in sumy_summarizers|pytextrank_summarizers
         }
         
         # Add each file's results in the set for all the files.
         files_set.append({summary_file.replace("_summary.txt","_body.txt"): file_set})
 
     # Store the results in a new file.
-    with open (os.path.join(results_path, f"{language}_scores.json"),'w', encoding = 'utf8') as json_file:                       
+    with open(os.path.join(results_path, f"{language}_scores.json"),'w', encoding = 'utf8') as json_file:                       
         json.dump(files_set,json_file, ensure_ascii = False, indent = 4, separators = (',', ':'))
     return
 
@@ -107,11 +108,12 @@ def evaluation(language, lang_path):
 def pyTextRank(text, summarizer, language):
 
     # Choose proper language model
-    nlp = spacy.load("el_core_news_sm") if language == "greek" else spacy.load("en_core_web_sm")
+    nlp = greek_nlp if language == "greek" else english_nlp
 
     # Summarization pipeline
     nlp.add_pipe(factory_name = summarizer, name = summarizer, last = True)
     doc = nlp(text)
     summary = ' '.join([str(sent) for sent in doc._.textrank.summary(limit_sentences = n_sentences)]) # Join sentences
+    nlp.remove_pipe(summarizer)
 
     return summary
