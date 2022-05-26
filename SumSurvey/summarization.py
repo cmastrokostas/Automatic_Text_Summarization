@@ -2,22 +2,25 @@ import sumy
 import pytextrank
 import os
 import json
+import string
 import rouge
 import spacy 
+import unicodedata
 
 
-from rouge import Rouge
 from SumSurvey.config import multiling_path, baseline_path, summary_path, results_path, en_path, summaries_file, huggingface_metrics
 from SumSurvey.config import n_sentences, sumy_summarizers, pytextrank_summarizers
 from sumy.parsers.plaintext import PlaintextParser
 from sumy.nlp.tokenizers import Tokenizer
+from sumy.nlp.stemmers import Stemmer
 from datasets import load_metric
+from env.rouge import rouge_scorer
+
 
 greek_nlp = spacy.load("el_core_news_sm")
 english_nlp = spacy.load("en_core_web_sm")
 
 def summarization(language, lang_path):
-
     path = os.path.join(multiling_path, lang_path, baseline_path)
 
     # Make a List of text files in the wanted file directory.
@@ -60,10 +63,13 @@ def summarization(language, lang_path):
 
 
 def evaluation(language, lang_path):
+    stemmer = Stemmer("greek")
+    gr_tokenizer = Tokenizer('greek')._get_word_tokenizer('greek')
+    gr_rouge = rouge_scorer.RougeScorer(['rouge1','rouge2', 'rougeL', 'rougeLsum'], use_stemmer = False, tokenizer = gr_tokenizer )
 
     # Choose the proper language for the path setup.
     language = 'english' if lang_path == en_path else 'greek'
-    
+
     # Hypothesis path (machine generated) & Reference path (author assigned) summaries. 
     hyp_path = os.path.join(results_path, f"{language}_{summaries_file}")
     ref_path = os.path.join(multiling_path, lang_path, summary_path)
@@ -71,31 +77,39 @@ def evaluation(language, lang_path):
     # Make a List of text files in the wanted file directory.
     summary_files = os.listdir(ref_path)
 
-    # Evaluation
-    rouge = Rouge()
-
     with open(hyp_path, 'r', encoding = 'utf-8-sig', errors = 'ignore') as file:
         hypotheses_list = json.load(file)
     
     files_set = []
+
     # Iterate through summary files.
     for summary_file, hypothesis in zip(summary_files, hypotheses_list): 
         with open(os.path.join(ref_path, summary_file), 'r', encoding = 'utf-8-sig', errors = 'ignore') as file:
             reference = file.read()
-
+            
         hyp_file = summary_file.replace("_summary", "_baseline")
 
         # Metrics Included
-        file_set = {
-            summarizer:{
-                "rouge-hf": huggingface_metrics["rouge"].compute(predictions = [hypothesis[hyp_file][summarizer]], references = [reference]),
-                "bleu-1": huggingface_metrics["bleu"].compute(predictions = [(hypothesis[hyp_file][summarizer]).split()], references = [[reference.split()]], max_order = 1),
-                "sacrebleu": huggingface_metrics["sacrebleu"].compute(predictions = [hypothesis[hyp_file][summarizer]], references = [[reference]]),
-                "bleurt": huggingface_metrics["bleurt"].compute(predictions = [hypothesis[hyp_file][summarizer]], references = [[reference]])
-                }
-            for summarizer in sumy_summarizers|pytextrank_summarizers
-        }
-        
+        if language == 'english' :
+            file_set = {
+                summarizer:{
+                    "rouge": huggingface_metrics["rouge"].compute(predictions = [hypothesis[hyp_file][summarizer]], references = [reference]),
+                    "bleu-1": huggingface_metrics["bleu"].compute(predictions = [(hypothesis[hyp_file][summarizer]).split()], references = [[reference.split()]], max_order = 1),
+                    "bleu-2": huggingface_metrics["bleu"].compute(predictions = [(hypothesis[hyp_file][summarizer]).split()], references = [[reference.split()]], max_order = 2),
+                    "sacrebleu": huggingface_metrics["sacrebleu"].compute(predictions = [hypothesis[hyp_file][summarizer]], references = [[reference]]),
+                    }
+                for summarizer in sumy_summarizers|pytextrank_summarizers
+            }
+        else:
+            file_set = {
+                summarizer:{
+                    "rouge": gr_rouge.score(prepare(hypothesis[hyp_file][summarizer]), prepare(reference)),
+                    "bleu-1": huggingface_metrics["bleu"].compute(predictions = [prepare((hypothesis[hyp_file][summarizer])).split()], references = [[prepare(reference).split()]], max_order = 1),
+                    "bleu-2": huggingface_metrics["bleu"].compute(predictions = [prepare((hypothesis[hyp_file][summarizer])).split()], references = [[prepare(reference).split()]], max_order = 2),
+                    "sacrebleu": huggingface_metrics["sacrebleu"].compute(predictions = [prepare(hypothesis[hyp_file][summarizer])], references = [[prepare(reference)]]),
+                    }
+                for summarizer in sumy_summarizers|pytextrank_summarizers
+            }
         # Add each file's results in the set for all the files.
         files_set.append({summary_file.replace("_summary.txt","_body.txt"): file_set})
 
@@ -117,3 +131,12 @@ def pyTextRank(text, summarizer, language):
     nlp.remove_pipe(summarizer)
 
     return summary
+
+# Remove Accentation
+def strip_accents(s):
+    return ''.join(c for c in unicodedata.normalize('NFD', s) 
+            if unicodedata.category(c) != 'Mn')
+
+# Greek Preprocessing
+def prepare(text, stemmer = Stemmer("greek")):
+    return ' '.join([strip_accents(stemmer(i)) for i in text.upper().translate(str.maketrans('', '', string.punctuation)).split()])

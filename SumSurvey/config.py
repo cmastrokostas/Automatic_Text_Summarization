@@ -37,5 +37,4 @@ huggingface_metrics = {
     "rouge":load_metric("rouge"),
     "sacrebleu": load_metric("sacrebleu"),
     "bleu": load_metric('bleu'),
-    "bleurt": load_metric("bleurt")
 }

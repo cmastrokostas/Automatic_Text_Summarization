@@ -2,7 +2,7 @@
     {
         "1c124154ccb8c775fbbc4e8a7d9f5cca_body.txt":{
             "LexRank":{
-                "rouge-hf":{
+                "rouge":{
                     "rouge1":[
                         [
                             0.48325358851674644,
@@ -82,6 +82,17 @@
                     "translation_length":205,
                     "reference_length":278
                 },
+                "bleu-2":{
+                    "bleu":0.13140463523109142,
+                    "precisions":[
+                        0.44878048780487806,
+                        0.0784313725490196
+                    ],
+                    "brevity_penalty":0.7004042847765255,
+                    "length_ratio":0.737410071942446,
+                    "translation_length":205,
+                    "reference_length":278
+                },
                 "sacrebleu":{
                     "score":4.005614347941845,
                     "counts":[
@@ -105,15 +116,10 @@
                     "bp":0.6811800811619673,
                     "sys_len":224,
                     "ref_len":310
-                },
-                "bleurt":{
-                    "scores":[
-                        -0.8499189019203186
-                    ]
                 }
             },
             "TextRank":{
-                "rouge-hf":{
+                "rouge":{
                     "rouge1":[
                         [
                             0.4268292682926829,
@@ -193,6 +199,17 @@
                     "translation_length":244,
                     "reference_length":278
                 },
+                "bleu-2":{
+                    "bleu":0.11115351079469192,
+                    "precisions":[
+                        0.36065573770491804,
+                        0.04526748971193416
+                    ],
+                    "brevity_penalty":0.8699284933222149,
+                    "length_ratio":0.8776978417266187,
+                    "translation_length":244,
+                    "reference_length":278
+                },
                 "sacrebleu":{
                     "score":1.2185029801603036,
                     "counts":[
@@ -216,15 +233,10 @@
                     "bp":0.8549464719510204,
                     "sys_len":268,
                     "ref_len":310
-                },
-                "bleurt":{
-                    "scores":[
-                        -0.6731951832771301
-                    ]
                 }
             },
             "Luhn":{
-                "rouge-hf":{
+                "rouge":{
                     "rouge1":[
                         [
                             0.49825783972125437,
@@ -304,6 +316,17 @@
                     "translation_length":282,
                     "reference_length":278
                 },
+                "bleu-2":{
+                    "bleu":0.22815724407306925,
+                    "precisions":[
+                        0.4432624113475177,
+                        0.11743772241992882
+                    ],
+                    "brevity_penalty":1.0,
+                    "length_ratio":1.014388489208633,
+                    "translation_length":282,
+                    "reference_length":278
+                },
                 "sacrebleu":{
                     "score":9.321337636926717,
                     "counts":[
@@ -327,15 +350,10 @@
                     "bp":0.9935275307599738,
                     "sys_len":308,
                     "ref_len":310
-                },
-                "bleurt":{
-                    "scores":[
-                        -0.8228131532669067
-                    ]
                 }
             },
             "Lsa":{
-                "rouge-hf":{
+                "rouge":{
                     "rouge1":[
                         [
                             0.5347222222222222,
@@ -415,6 +433,17 @@
                     "translation_length":142,
                     "reference_length":278
                 },
+                "bleu-2":{
+                    "bleu":0.0774724588560523,
+                    "precisions":[
+                        0.4788732394366197,
+                        0.0851063829787234
+                    ],
+                    "brevity_penalty":0.3837567161471448,
+                    "length_ratio":0.5107913669064749,
+                    "translation_length":142,
+                    "reference_length":278
+                },
                 "sacrebleu":{
                     "score":2.5739531458929448,
                     "counts":[
@@ -438,15 +467,10 @@
                     "bp":0.4058220602093492,
                     "sys_len":163,
                     "ref_len":310
-                },
-                "bleurt":{
-                    "scores":[
-                        -0.968178927898407
-                    ]
                 }
             },
             "pyTextRank":{
-                "rouge-hf":{
+                "rouge":{
                     "rouge1":[
                         [
                             0.4502923976608187,
@@ -526,6 +550,17 @@
                     "translation_length":170,
                     "reference_length":278
                 },
+                "bleu-2":{
+                    "bleu":0.08796097773088883,
+                    "precisions":[
+                        0.4235294117647059,
+                        0.0650887573964497
+                    ],
+                    "brevity_penalty":0.5297796478574898,
+                    "length_ratio":0.6115107913669064,
+                    "translation_length":170,
+                    "reference_length":278
+                },
                 "sacrebleu":{
                     "score":1.7716742568449027,
                     "counts":[
@@ -549,15 +584,10 @@
                     "bp":0.5041998263195998,
                     "sys_len":184,
                     "ref_len":310
-                },
-                "bleurt":{
-                    "scores":[
-                        -0.6442310810089111
-                    ]
                 }
             },
             "PositionRank":{
-                "rouge-hf":{
+                "rouge":{
                     "rouge1":[
                         [
                             0.6045454545454545,
@@ -637,6 +667,17 @@
                     "translation_length":215,
                     "reference_length":278
                 },
+                "bleu-2":{
+                    "bleu":0.27218773197273083,
+                    "precisions":[
+                        0.5813953488372093,
+                        0.22897196261682243
+                    ],
+                    "brevity_penalty":0.7460047915468472,
+                    "length_ratio":0.7733812949640287,
+                    "translation_length":215,
+                    "reference_length":278
+                },
                 "sacrebleu":{
                     "score":13.395712301171363,
                     "counts":[
@@ -660,15 +701,10 @@
                     "bp":0.7103543549367081,
                     "sys_len":231,
                     "ref_len":310
-                },
-                "bleurt":{
-                    "scores":[
-                        -0.5746903419494629
-                    ]
                 }
             },
             "BiasedRank":{
-                "rouge-hf":{
+                "rouge":{
                     "rouge1":[
                         [
                             0.4502923976608187,
@@ -748,6 +784,17 @@
                     "translation_length":170,
                     "reference_length":278
                 },
+                "bleu-2":{
+                    "bleu":0.08796097773088883,
+                    "precisions":[
+                        0.4235294117647059,
+                        0.0650887573964497
+                    ],
+                    "brevity_penalty":0.5297796478574898,
+                    "length_ratio":0.6115107913669064,
+                    "translation_length":170,
+                    "reference_length":278
+                },
                 "sacrebleu":{
                     "score":1.7716742568449027,
                     "counts":[
@@ -771,15 +818,10 @@
                     "bp":0.5041998263195998,
                     "sys_len":184,
                     "ref_len":310
-                },
-                "bleurt":{
-                    "scores":[
-                        -0.6442310810089111
-                    ]
                 }
             },
             "TopicRank":{
-                "rouge-hf":{
+                "rouge":{
                     "rouge1":[
                         [
                             0.4484536082474227,
@@ -859,6 +901,17 @@
                     "translation_length":194,
                     "reference_length":278
                 },
+                "bleu-2":{
+                    "bleu":0.09240218549549503,
+                    "precisions":[
+                        0.3917525773195876,
+                        0.05181347150259067
+                    ],
+                    "brevity_penalty":0.6485671780300782,
+                    "length_ratio":0.697841726618705,
+                    "translation_length":194,
+                    "reference_length":278
+                },
                 "sacrebleu":{
                     "score":3.9046337563039453,
                     "counts":[
@@ -882,11 +935,6 @@
                     "bp":0.6385226497005074,
                     "sys_len":214,
                     "ref_len":310
-                },
-                "bleurt":{
-                    "scores":[
-                        -0.5927832126617432
-                    ]
                 }
             }
         }
@@ -894,7 +942,7 @@
     {
         "2c02d6960625b1d510098f7857f90ab9_body.txt":{
             "LexRank":{
-                "rouge-hf":{
+                "rouge":{
                     "rouge1":[
                         [
                             0.6136363636363636,
@@ -974,6 +1022,17 @@
                     "translation_length":84,
                     "reference_length":260
                 },
+                "bleu-2":{
+                    "bleu":0.04636481860824443,
+                    "precisions":[
+                        0.5357142857142857,
+                        0.26506024096385544
+                    ],
+                    "brevity_penalty":0.12304094470311129,
+                    "length_ratio":0.3230769230769231,
+                    "translation_length":84,
+                    "reference_length":260
+                },
                 "sacrebleu":{
                     "score":2.6355908292181844,
                     "counts":[
@@ -997,15 +1056,10 @@
                     "bp":0.10874495509722103,
                     "sys_len":96,
                     "ref_len":309
-                },
-                "bleurt":{
-                    "scores":[
-                        -0.6405258774757385
-                    ]
                 }
             },
             "TextRank":{
-                "rouge-hf":{
+                "rouge":{
                     "rouge1":[
                         [
                             0.4343891402714932,
@@ -1085,6 +1139,17 @@
                     "translation_length":220,
                     "reference_length":260
                 },
+                "bleu-2":{
+                    "bleu":0.1584450198437443,
+                    "precisions":[
+                        0.39545454545454545,
+                        0.091324200913242
+                    ],
+                    "brevity_penalty":0.8337529180751805,
+                    "length_ratio":0.8461538461538461,
+                    "translation_length":220,
+                    "reference_length":260
+                },
                 "sacrebleu":{
                     "score":6.140544563675329,
                     "counts":[
@@ -1108,15 +1173,10 @@
                     "bp":0.7819474486298873,
                     "sys_len":248,
                     "ref_len":309
-                },
-                "bleurt":{
-                    "scores":[
-                        -0.7604042291641235
-                    ]
                 }
             },
             "Luhn":{
-                "rouge-hf":{
+                "rouge":{
                     "rouge1":[
                         [
                             0.45588235294117646,
@@ -1196,6 +1256,17 @@
                     "translation_length":202,
                     "reference_length":260
                 },
+                "bleu-2":{
+                    "bleu":0.1478916715633169,
+                    "precisions":[
+                        0.41089108910891087,
+                        0.0945273631840796
+                    ],
+                    "brevity_penalty":0.750415134534113,
+                    "length_ratio":0.7769230769230769,
+                    "translation_length":202,
+                    "reference_length":260
+                },
                 "sacrebleu":{
                     "score":6.9986468718427055,
                     "counts":[
@@ -1219,15 +1290,10 @@
                     "bp":0.7257767484189029,
                     "sys_len":234,
                     "ref_len":309
-                },
-                "bleurt":{
-                    "scores":[
-                        -0.9151707291603088
-                    ]
                 }
             },
             "Lsa":{
-                "rouge-hf":{
+                "rouge":{
                     "rouge1":[
                         [
                             0.29292929292929293,
@@ -1307,6 +1373,17 @@
                     "translation_length":97,
                     "reference_length":260
                 },
+                "bleu-2":{
+                    "bleu":0.018915608325855728,
+                    "precisions":[
+                        0.24742268041237114,
+                        0.041666666666666664
+                    ],
+                    "brevity_penalty":0.18629713663582356,
+                    "length_ratio":0.3730769230769231,
+                    "translation_length":97,
+                    "reference_length":260
+                },
                 "sacrebleu":{
                     "score":0.6948775722794401,
                     "counts":[
@@ -1330,15 +1407,10 @@
                     "bp":0.23857516379064178,
                     "sys_len":127,
                     "ref_len":309
-                },
-                "bleurt":{
-                    "scores":[
-                        -1.121563196182251
-                    ]
                 }
             },
             "pyTextRank":{
-                "rouge-hf":{
+                "rouge":{
                     "rouge1":[
                         [
                             0.5478260869565217,
@@ -1418,6 +1490,17 @@
                     "translation_length":112,
                     "reference_length":260
                 },
+                "bleu-2":{
+                    "bleu":0.07730197889588106,
+                    "precisions":[
+                        0.5178571428571429,
+                        0.16216216216216217
+                    ],
+                    "brevity_penalty":0.266753952563185,
+                    "length_ratio":0.4307692307692308,
+                    "translation_length":112,
+                    "reference_length":260
+                },
                 "sacrebleu":{
                     "score":4.0813601500902985,
                     "counts":[
@@ -1441,15 +1524,10 @@
                     "bp":0.2431534629991392,
                     "sys_len":128,
                     "ref_len":309
-                },
-                "bleurt":{
-                    "scores":[
-                        -0.7639173865318298
-                    ]
                 }
             },
             "PositionRank":{
-                "rouge-hf":{
+                "rouge":{
                     "rouge1":[
                         [
                             0.5478260869565217,
@@ -1529,6 +1607,17 @@
                     "translation_length":112,
                     "reference_length":260
                 },
+                "bleu-2":{
+                    "bleu":0.07730197889588106,
+                    "precisions":[
+                        0.5178571428571429,
+                        0.16216216216216217
+                    ],
+                    "brevity_penalty":0.266753952563185,
+                    "length_ratio":0.4307692307692308,
+                    "translation_length":112,
+                    "reference_length":260
+                },
                 "sacrebleu":{
                     "score":4.0813601500902985,
                     "counts":[
@@ -1552,15 +1641,10 @@
                     "bp":0.2431534629991392,
                     "sys_len":128,
                     "ref_len":309
-                },
-                "bleurt":{
-                    "scores":[
-                        -0.7639173865318298
-                    ]
                 }
             },
             "BiasedRank":{
-                "rouge-hf":{
+                "rouge":{
                     "rouge1":[
                         [
                             0.5478260869565217,
@@ -1640,6 +1724,17 @@
                     "translation_length":112,
                     "reference_length":260
                 },
+                "bleu-2":{
+                    "bleu":0.07730197889588106,
+                    "precisions":[
+                        0.5178571428571429,
+                        0.16216216216216217
+                    ],
+                    "brevity_penalty":0.266753952563185,
+                    "length_ratio":0.4307692307692308,
+                    "translation_length":112,
+                    "reference_length":260
+                },
                 "sacrebleu":{
                     "score":4.0813601500902985,
                     "counts":[
@@ -1663,15 +1758,10 @@
                     "bp":0.2431534629991392,
                     "sys_len":128,
                     "ref_len":309
-                },
-                "bleurt":{
-                    "scores":[
-                        -0.7639173865318298
-                    ]
                 }
             },
             "TopicRank":{
-                "rouge-hf":{
+                "rouge":{
                     "rouge1":[
                         [
                             0.6111111111111112,
@@ -1751,6 +1841,17 @@
                     "translation_length":124,
                     "reference_length":260
                 },
+                "bleu-2":{
+                    "bleu":0.1265422869314627,
+                    "precisions":[
+                        0.5887096774193549,
+                        0.24390243902439024
+                    ],
+                    "brevity_penalty":0.3339465951506875,
+                    "length_ratio":0.47692307692307695,
+                    "translation_length":124,
+                    "reference_length":260
+                },
                 "sacrebleu":{
                     "score":6.6650515826403005,
                     "counts":[
@@ -1774,11 +1875,6 @@
                     "bp":0.28494062534092546,
                     "sys_len":137,
                     "ref_len":309
-                },
-                "bleurt":{
-                    "scores":[
-                        -0.6303138136863708
-                    ]
                 }
             }
         }
@@ -1786,7 +1882,7 @@
     {
         "2e52338ff79897563f1b45d1966b2737_body.txt":{
             "LexRank":{
-                "rouge-hf":{
+                "rouge":{
                     "rouge1":[
                         [
                             0.6727272727272727,
@@ -1866,6 +1962,17 @@
                     "translation_length":162,
                     "reference_length":287
                 },
+                "bleu-2":{
+                    "bleu":0.15615009444727992,
+                    "precisions":[
+                        0.5925925925925926,
+                        0.19254658385093168
+                    ],
+                    "brevity_penalty":0.46227055691949875,
+                    "length_ratio":0.5644599303135889,
+                    "translation_length":162,
+                    "reference_length":287
+                },
                 "sacrebleu":{
                     "score":8.51094873216552,
                     "counts":[
@@ -1889,15 +1996,10 @@
                     "bp":0.45579401832801714,
                     "sys_len":182,
                     "ref_len":325
-                },
-                "bleurt":{
-                    "scores":[
-                        -0.8916160464286804
-                    ]
                 }
             },
             "TextRank":{
-                "rouge-hf":{
+                "rouge":{
                     "rouge1":[
                         [
                             0.36134453781512604,
@@ -1977,6 +2079,17 @@
                     "translation_length":351,
                     "reference_length":287
                 },
+                "bleu-2":{
+                    "bleu":0.15029478563317686,
+                    "precisions":[
+                        0.3162393162393162,
+                        0.07142857142857142
+                    ],
+                    "brevity_penalty":1.0,
+                    "length_ratio":1.2229965156794425,
+                    "translation_length":351,
+                    "reference_length":287
+                },
                 "sacrebleu":{
                     "score":4.311935217949574,
                     "counts":[
@@ -2000,15 +2113,10 @@
                     "bp":1.0,
                     "sys_len":388,
                     "ref_len":325
-                },
-                "bleurt":{
-                    "scores":[
-                        -1.0452771186828613
-                    ]
                 }
             },
             "Luhn":{
-                "rouge-hf":{
+                "rouge":{
                     "rouge1":[
                         [
                             0.38461538461538464,
@@ -2088,6 +2196,17 @@
                     "translation_length":331,
                     "reference_length":287
                 },
+                "bleu-2":{
+                    "bleu":0.15425248631387053,
+                    "precisions":[
+                        0.3413897280966767,
+                        0.0696969696969697
+                    ],
+                    "brevity_penalty":1.0,
+                    "length_ratio":1.1533101045296168,
+                    "translation_length":331,
+                    "reference_length":287
+                },
                 "sacrebleu":{
                     "score":4.377274095699272,
                     "counts":[
@@ -2111,15 +2230,10 @@
                     "bp":1.0,
                     "sys_len":361,
                     "ref_len":325
-                },
-                "bleurt":{
-                    "scores":[
-                        -1.0452771186828613
-                    ]
                 }
             },
             "Lsa":{
-                "rouge-hf":{
+                "rouge":{
                     "rouge1":[
                         [
                             0.5087719298245614,
@@ -2199,6 +2313,17 @@
                     "translation_length":111,
                     "reference_length":287
                 },
+                "bleu-2":{
+                    "bleu":0.036887454820304665,
+                    "precisions":[
+                        0.3963963963963964,
+                        0.08181818181818182
+                    ],
+                    "brevity_penalty":0.20482781377586531,
+                    "length_ratio":0.3867595818815331,
+                    "translation_length":111,
+                    "reference_length":287
+                },
                 "sacrebleu":{
                     "score":1.5609879760177248,
                     "counts":[
@@ -2222,15 +2347,10 @@
                     "bp":0.17709084367411262,
                     "sys_len":119,
                     "ref_len":325
-                },
-                "bleurt":{
-                    "scores":[
-                        -1.0755366086959839
-                    ]
                 }
             },
             "pyTextRank":{
-                "rouge-hf":{
+                "rouge":{
                     "rouge1":[
                         [
                             0.425,
@@ -2310,6 +2430,17 @@
                     "translation_length":152,
                     "reference_length":287
                 },
+                "bleu-2":{
+                    "bleu":0.04420695450318686,
+                    "precisions":[
+                        0.34868421052631576,
+                        0.033112582781456956
+                    ],
+                    "brevity_penalty":0.41141292105358146,
+                    "length_ratio":0.5296167247386759,
+                    "translation_length":152,
+                    "reference_length":287
+                },
                 "sacrebleu":{
                     "score":0.7701195356986523,
                     "counts":[
@@ -2333,15 +2464,10 @@
                     "bp":0.40633196921259135,
                     "sys_len":171,
                     "ref_len":325
-                },
-                "bleurt":{
-                    "scores":[
-                        -0.8179178237915039
-                    ]
                 }
             },
             "PositionRank":{
-                "rouge-hf":{
+                "rouge":{
                     "rouge1":[
                         [
                             0.34265734265734266,
@@ -2421,6 +2547,17 @@
                     "translation_length":135,
                     "reference_length":287
                 },
+                "bleu-2":{
+                    "bleu":0.026417269268436405,
+                    "precisions":[
+                        0.2962962962962963,
+                        0.022388059701492536
+                    ],
+                    "brevity_penalty":0.32435200234754524,
+                    "length_ratio":0.47038327526132406,
+                    "translation_length":135,
+                    "reference_length":287
+                },
                 "sacrebleu":{
                     "score":0.5554894892115801,
                     "counts":[
@@ -2444,15 +2581,10 @@
                     "bp":0.32491781468102465,
                     "sys_len":153,
                     "ref_len":325
-                },
-                "bleurt":{
-                    "scores":[
-                        -1.184723973274231
-                    ]
                 }
             },
             "BiasedRank":{
-                "rouge-hf":{
+                "rouge":{
                     "rouge1":[
                         [
                             0.425,
@@ -2532,6 +2664,17 @@
                     "translation_length":152,
                     "reference_length":287
                 },
+                "bleu-2":{
+                    "bleu":0.04420695450318686,
+                    "precisions":[
+                        0.34868421052631576,
+                        0.033112582781456956
+                    ],
+                    "brevity_penalty":0.41141292105358146,
+                    "length_ratio":0.5296167247386759,
+                    "translation_length":152,
+                    "reference_length":287
+                },
                 "sacrebleu":{
                     "score":0.7701195356986523,
                     "counts":[
@@ -2555,15 +2698,10 @@
                     "bp":0.40633196921259135,
                     "sys_len":171,
                     "ref_len":325
-                },
-                "bleurt":{
-                    "scores":[
-                        -0.8179178237915039
-                    ]
                 }
             },
             "TopicRank":{
-                "rouge-hf":{
+                "rouge":{
                     "rouge1":[
                         [
                             0.4276729559748428,
@@ -2643,6 +2781,17 @@
                     "translation_length":152,
                     "reference_length":287
                 },
+                "bleu-2":{
+                    "bleu":0.05611533980882247,
+                    "precisions":[
+                        0.40131578947368424,
+                        0.046357615894039736
+                    ],
+                    "brevity_penalty":0.41141292105358146,
+                    "length_ratio":0.5296167247386759,
+                    "translation_length":152,
+                    "reference_length":287
+                },
                 "sacrebleu":{
                     "score":1.0547689583246598,
                     "counts":[
@@ -2666,11 +2815,6 @@
                     "bp":0.38372415714184915,
                     "sys_len":166,
                     "ref_len":325
-                },
-                "bleurt":{
-                    "scores":[
-                        -0.9293747544288635
-                    ]
                 }
             }
         }
