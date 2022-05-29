@@ -11,7 +11,7 @@ def main():
 
     languages = {'greek': el_path, 'english': en_path}
     for language in languages: 
-        #summarization(language, languages[language])
+        summarization(language, languages[language])
         evaluation(language, languages[language])
     return
 
