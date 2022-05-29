@@ -8,7 +8,6 @@ import spacy
 import unicodedata
 import re
 
-
 from SumSurvey.config import multiling_path, baseline_path, summary_path, results_path, en_path, summaries_file, huggingface_metrics
 from SumSurvey.config import n_sentences, sumy_summarizers, pytextrank_summarizers
 from SumSurvey.config import abstractive_models
@@ -18,13 +17,6 @@ from sumy.nlp.stemmers import Stemmer
 from datasets import load_metric
 from env.rouge import rouge_scorer
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM, pipeline
-
-
-
-
-
-
-
 
 greek_nlp = spacy.load("el_core_news_sm")
 english_nlp = spacy.load("en_core_web_sm")
