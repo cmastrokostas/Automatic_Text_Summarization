@@ -6,15 +6,24 @@ import string
 import rouge
 import spacy 
 import unicodedata
+import re
 
 
 from SumSurvey.config import multiling_path, baseline_path, summary_path, results_path, en_path, summaries_file, huggingface_metrics
 from SumSurvey.config import n_sentences, sumy_summarizers, pytextrank_summarizers
+from SumSurvey.config import abstractive_models
 from sumy.parsers.plaintext import PlaintextParser
 from sumy.nlp.tokenizers import Tokenizer
 from sumy.nlp.stemmers import Stemmer
 from datasets import load_metric
 from env.rouge import rouge_scorer
+from transformers import AutoTokenizer, AutoModelForSeq2SeqLM, pipeline
+
+
+
+
+
+
 
 
 greek_nlp = spacy.load("el_core_news_sm")
@@ -43,15 +52,18 @@ def summarization(language, lang_path):
         }
 
         with open(os.path.join(path, text_file), 'r', encoding = 'utf-8-sig', errors = 'ignore') as file:
-            file1 = file.read().replace("\n"," ")  # file_text = ' '.join([str(sentence) for sentence in parser.document.sentences])
+            file1 = file.read().replace("\n"," ")
 
         # Produce summaries for pyTextRank algorithms.
         spacy_summaries = {
             summarizer: (pyTextRank(file1, pytextrank_summarizers[summarizer], language)) for summarizer in pytextrank_summarizers
         }
+        abstractive_summaries = {
+            summarizer: (abstractive(file1,abstractive_models[summarizer])) for summarizer in abstractive_models
+            }
 
         # Join Dictionaries
-        summaries = sumy_summaries|spacy_summaries
+        summaries = sumy_summaries|spacy_summaries|abstractive_summaries if language == "english" else sumy_summaries|spacy_summaries
 
         # Add each file's results in the set for all the files.
         files_set.append({text_file: summaries})
@@ -98,7 +110,7 @@ def evaluation(language, lang_path):
                     "bleu-2": huggingface_metrics["bleu"].compute(predictions = [(hypothesis[hyp_file][summarizer]).split()], references = [[reference.split()]], max_order = 2),
                     "sacrebleu": huggingface_metrics["sacrebleu"].compute(predictions = [hypothesis[hyp_file][summarizer]], references = [[reference]]),
                     }
-                for summarizer in sumy_summarizers|pytextrank_summarizers
+                for summarizer in sumy_summarizers|pytextrank_summarizers|abstractive_models
             }
         else:
             file_set = {
@@ -140,3 +152,32 @@ def strip_accents(s):
 # Greek Preprocessing
 def prepare(text, stemmer = Stemmer("greek")):
     return ' '.join([strip_accents(stemmer(i)) for i in text.upper().translate(str.maketrans('', '', string.punctuation)).split()])
+
+
+def abstractive(text,model_name):
+    WHITESPACE_HANDLER = lambda k: re.sub('\s+', ' ', re.sub('\n+', ' ', k.strip()))
+
+    tokenizer = AutoTokenizer.from_pretrained(model_name)
+    model = AutoModelForSeq2SeqLM.from_pretrained(model_name)
+
+    input_ids = tokenizer(
+        [WHITESPACE_HANDLER(text)],
+        return_tensors="pt",
+        padding="max_length",
+        truncation=True,
+        max_length=512
+    )["input_ids"]
+
+    output_ids = model.generate(
+        input_ids=input_ids,
+        max_length=84,
+        no_repeat_ngram_size=2,
+        num_beams=4
+    )[0]
+
+    summary = tokenizer.decode(
+        output_ids,
+        skip_special_tokens=True,
+        clean_up_tokenization_spaces=False
+    )
+    return summary

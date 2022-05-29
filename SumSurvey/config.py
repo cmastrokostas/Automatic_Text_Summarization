@@ -38,3 +38,14 @@ huggingface_metrics = {
     "sacrebleu": load_metric("sacrebleu"),
     "bleu": load_metric('bleu'),
 }
+
+abstractive_models = {
+    "Distilbart-cnn-12-6": "sshleifer/distilbart-cnn-12-6",
+    "Distilbart-xsum-12-6":"sshleifer/distilbart-xsum-12-6",
+    "mT5-multilingual-XLSum": "csebuetnlp/mT5_multilingual_XLSum",
+    "bart-large-cnn": "facebook/bart-large-cnn",
+    "bart-large-xsum": "facebook/bart-large-xsum",
+    "pegasus-large": "google/pegasus-large",
+    "pegasus-multi_news": "google/pegasus-multi_news",
+    "pegasus-xsum": "google/pegasus-xsum"
+    }
