@@ -7,6 +7,7 @@ import rouge
 import spacy 
 import unicodedata
 import re
+import torch
 
 from SumSurvey.config import multiling_path, baseline_path, summary_path, results_path, en_path, summaries_file, huggingface_metrics
 from SumSurvey.config import n_sentences, sumy_summarizers, pytextrank_summarizers
@@ -29,44 +30,42 @@ def summarization(language, lang_path):
 
     # Initialize empty set of summaries for all files.
     files_set = []
-    
-    # Iterate through files in text files list. 
-    for text_file in text_files:
 
-        # PlaintextParser converts the document in the proper form to be summarized.
-        parser = PlaintextParser.from_file(os.path.join(path, text_file), Tokenizer(language))
+    for summarizer in sumy_summarizers:
+        sumy_summarizer = sumy_summarizers[summarizer]
 
-        # Produce summaries for sumy algorithms.
-        sumy_summaries = {
-            summarizer: ' '.join([
-                str(sent) for sent in sumy_summarizers[summarizer](parser.document, n_sentences)
-            ]) for summarizer in sumy_summarizers
-        }
+        #Iterate through files in text files list. 
+        for text_file in text_files:
+            # PlaintextParser converts the document in the proper form to be summarized.
+            parser = PlaintextParser.from_file(os.path.join(path, text_file), Tokenizer(language))
+            text = ' '.join([str(sent) for sent in sumy_summarizer(parser.document, n_sentences)])
+            save_text(text, text_file, multiling_path, lang_path, summarizer)
 
-        with open(os.path.join(path, text_file), 'r', encoding = 'utf-8-sig', errors = 'ignore') as file:
-            file1 = file.read().replace("\n"," ")
 
-        # Produce summaries for pyTextRank algorithms.
-        spacy_summaries = {
-            summarizer: (pyTextRank(file1, pytextrank_summarizers[summarizer], language)) for summarizer in pytextrank_summarizers
-        }
-        abstractive_summaries = {
-            summarizer: (abstractive(file1,abstractive_models[summarizer])) for summarizer in abstractive_models
-            }
+    for summarizer in pytextrank_summarizers:
+        pytextrank_summarizer = pytextrank_summarizers[summarizer]
+        for text_file in text_files:
+            with open(os.path.join(path, text_file), 'r', encoding = 'utf-8-sig', errors = 'ignore') as file:
+                file1 = file.read().replace("\n\n"," ").replace("\n"," ")
+            text = pyTextRank(file1, pytextrank_summarizer, language)
+            save_text(text, text_file, multiling_path, lang_path, summarizer)
 
-        # Join Dictionaries
-        summaries = sumy_summaries|spacy_summaries|abstractive_summaries if language == "english" else sumy_summaries|spacy_summaries
+    if language == 'english':
+        for model in abstractive_models:
+            print(model)
+            abstractive_model = AutoModelForSeq2SeqLM.from_pretrained(abstractive_models[model])
+            abstractive_tokenizer = AutoTokenizer.from_pretrained(abstractive_models[model])
 
-        # Add each file's results in the set for all the files.
-        files_set.append({text_file: summaries})
-
-    # Store the results in a new file.
-    with open(os.path.join(results_path, f"{language}_{summaries_file}"), 'w', encoding = 'utf-8-sig', errors = 'ignore') as json_file:                       
-        json.dump(files_set, json_file, ensure_ascii = False, indent = 4, separators = (',', ': '))
+            for text_file in text_files:
+                with open(os.path.join(path, text_file), 'r', encoding = 'utf-8-sig', errors = 'ignore') as file:
+                    file1 = file.read().replace("\n\n"," ").replace("\n"," ")
+                text = abstractive(file1, abstractive_model, abstractive_tokenizer)
+                save_text(text, text_file, multiling_path, lang_path, summarizer)
     return
 
 
 def evaluation(language, lang_path):
+    print("no")
     stemmer = Stemmer("greek")
     gr_tokenizer = Tokenizer('greek')._get_word_tokenizer('greek')
     gr_rouge = rouge_scorer.RougeScorer(['rouge1','rouge2', 'rougeL', 'rougeLsum'], use_stemmer = False, tokenizer = gr_tokenizer )
@@ -145,27 +144,29 @@ def strip_accents(s):
 def prepare(text, stemmer = Stemmer("greek")):
     return ' '.join([strip_accents(stemmer(i)) for i in text.upper().translate(str.maketrans('', '', string.punctuation)).split()])
 
-
-def abstractive(text,model_name):
+def abstractive(text, model, tokenizer):
     WHITESPACE_HANDLER = lambda k: re.sub('\s+', ' ', re.sub('\n+', ' ', k.strip()))
+    #, model, tokenizer
+    #tokenizer = AutoTokenizer.from_pretrained(abstractive_models[model_name])
+    #model = AutoModelForSeq2SeqLM.from_pretrained(abstractive_models[model_name])
+    device = "cuda:0" 
+    model = model.to(device)
 
-    tokenizer = AutoTokenizer.from_pretrained(model_name)
-    model = AutoModelForSeq2SeqLM.from_pretrained(model_name)
 
     input_ids = tokenizer(
-        [WHITESPACE_HANDLER(text)],
+        [text],
         return_tensors="pt",
-        padding="max_length",
+        padding="longest",
         truncation=True,
         max_length=512
-    )["input_ids"]
+    )["input_ids"].to(device)
 
     output_ids = model.generate(
         input_ids=input_ids,
         max_length=84,
         no_repeat_ngram_size=2,
         num_beams=4
-    )[0]
+    )[0].to(device)
 
     summary = tokenizer.decode(
         output_ids,
@@ -173,3 +174,54 @@ def abstractive(text,model_name):
         clean_up_tokenization_spaces=False
     )
     return summary
+
+def save_text(text, text_file, dataset, lang_path, summarizer):
+
+    # Saved summary directories organisation: ./<dataset>/<lang>/produced/<summarizer>/<file_name>
+    with open(os.path.join(dataset,lang_path, "produced", summarizer, f"{text_file}"), 'w', encoding = 'utf-8-sig', errors = 'ignore') as f :
+        f.write(text)
+    return
+
+def macro_test(language, lang_path):
+    path = os.path.join(multiling_path, lang_path, baseline_path)
+
+    # Make a List of text files in the wanted file directory.
+    text_files = os.listdir(path)
+
+    # Initialize empty set of summaries for all files.
+    files_set = []
+
+    for summarizer in sumy_summarizers:
+
+        #Init summarizer
+        sumy_summarizer = sumy_summarizers[summarizer]
+
+        #Iterate through files in text files list. 
+        for text_file in text_files:
+            # PlaintextParser converts the document in the proper form to be summarized.
+            parser = PlaintextParser.from_file(os.path.join(path, text_file), Tokenizer(language))
+            text = ' '.join([str(sent) for sent in sumy_summarizer(parser.document, n_sentences)])
+            save_text(text, text_file, multiling_path, lang_path, summarizer)
+
+
+    for summarizer in pytextrank_summarizers:
+        #Init summarizer
+        pytextrank_summarizer = pytextrank_summarizers[summarizer]
+        for text_file in text_files:
+            with open(os.path.join(path, text_file), 'r', encoding = 'utf-8-sig', errors = 'ignore') as file:
+                file1 = file.read().replace("\n\n"," ").replace("\n"," ")
+            text = pyTextRank(file1, pytextrank_summarizer, language)
+            save_text(text, text_file, multiling_path, lang_path, summarizer)
+
+    if language == 'english': 
+        for model in abstractive_models:
+            # Init Model& Tokenizer before file iteration.
+            abstractive_model = AutoModelForSeq2SeqLM.from_pretrained(abstractive_models[model])
+            abstractive_tokenizer = AutoTokenizer.from_pretrained(abstractive_models[model])
+
+            for text_file in text_files:
+                with open(os.path.join(path, text_file), 'r', encoding = 'utf-8-sig', errors = 'ignore') as file:
+                    file1 = file.read().replace("\n\n"," ").replace("\n"," ")
+                text = abstractive(file1, abstractive_model, abstractive_tokenizer)
+                save_text(text, text_file, multiling_path, lang_path, summarizer)
+    return
