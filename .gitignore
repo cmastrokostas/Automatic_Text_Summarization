@@ -3,6 +3,8 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+SumSurvey/metric_tests.py
+SumSurvey/abstractive_tests.py
 my_datasets/
 env/
 __pycache__/
