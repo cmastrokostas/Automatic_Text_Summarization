@@ -9,8 +9,8 @@ Details about the datasets used in the survey can be found [here](https://github
 Configure `SumSurvey\config.py` and run `main.py`.
 
 ## Installation
-* `Python 3` (min. version 3.9), `pip3` (& `py` launcher Windows-only).
-* Run `pip3 install -r requirements.txt`
+* `Python 3` (min. version 3.9), `pip` (& `py` launcher Windows-only).
+* Run `pip install -r requirements.txt`
 
 ## Contributors
 * Charalampos Mastrokostas (chmastrokostas@gmail.com)
