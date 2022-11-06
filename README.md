@@ -1,10 +1,9 @@
 # Unsupervised Text Summarization Survey 
-
-This repository hosts code for my thesis on " Unsupervised Text Summarization on Modern Greek Textual Corpora "
+This repository hosts used code for my thesis on " Unsupervised Text Summarization on Modern Greek Textual Corpora "
 
 
 ## Datasets
-Available in [this link](http://multiling.iit.demokritos.gr/pages/view/1571/datasets)
+Details about the datasets used in the survey can be found in the folder `Dataset Preparation`.
 
 ## Results
 Configure `SumSurvey\config.py` and run `main.py`.
