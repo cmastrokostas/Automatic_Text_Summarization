@@ -4,12 +4,12 @@
 ## Datasets 
 The original datasets as well as some supporting files containing their splits required for the process can be found through the following links :
 
-cnn_dailymail: https://github.com/abisee/cnn-dailymail
-XSum: https://github.com/EdinburghNLP/XSum
-BillSum: https://github.com/FiscalNote/BillSum
-XLSum: https://github.com/csebuetnlp/xl-sum
-SamSum: https://metatext.io/datasets/samsum
-Reddit TIFU: https://github.com/ctr4si/MMN
+* cnn_dailymail: https://github.com/abisee/cnn-dailymail
+* XSum: https://github.com/EdinburghNLP/XSum
+* BillSum: https://github.com/FiscalNote/BillSum
+* XLSum: https://github.com/csebuetnlp/xl-sum
+* SamSum: https://metatext.io/datasets/samsum
+* Reddit TIFU: https://github.com/ctr4si/MMN
 
 ## Required data
 Make sure to have the following files saved in the 'Original Datasets' folder.
