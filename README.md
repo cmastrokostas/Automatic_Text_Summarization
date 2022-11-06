@@ -1,5 +1,5 @@
 # Text Summarization on English and Modern Greek Textual corpora
-This repository hosts used code for my thesis on " Unsupervised Text Summarization on Modern Greek Textual Corpora "
+This repository hosts used code for my thesis on " Text Summarization on English and Modern Greek Textual corpora "
 
 
 ## Datasets
