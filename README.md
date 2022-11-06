@@ -3,7 +3,7 @@ This repository hosts used code for my thesis on " Unsupervised Text Summarizati
 
 
 ## Datasets
-Details about the datasets used in the survey can be found [here](https://github.com/cmastrokostas/Unsupervised_Text_Summarization_Survey/tree/main/SumSurvey).
+Details about the datasets used in the survey can be found [here](https://github.com/cmastrokostas/Unsupervised_Text_Summarization_Survey/tree/main/Dataset Preparation).
 
 ## Results
 Configure `SumSurvey\config.py` and run `main.py`.
