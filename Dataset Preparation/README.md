@@ -23,9 +23,6 @@ Make sure to have the following files saved in the 'Original Datasets' folder.
 
 * Also make sure to extract all the  `.summary` files from XSum under the `Dataset Preparation\Original Datasets\xsum\en\raw` directory.
 
-## Installation
-`Python 3` (min. version 3.9), `pip3` (& `py` launcher Windows-only).
-
 ## Run
 Configurate the `original_folder` and `destination_folder` variables in `Dataset Preparation\main.py` to match your local folders.
 Run `Dataset Preparation\main.py`
