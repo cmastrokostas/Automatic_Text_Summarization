@@ -4,7 +4,7 @@
 ## Datasets 
 The original datasets as well as some supporting files containing their splits required for the process can be found through the following links :
 
-* CNN / Daily Mail: https://github.com/deepmind/rc-data
+* CNN / Daily Mail: https://github.com/abisee/cnn-dailymail
 * XSum: https://github.com/EdinburghNLP/XSum
 * BillSum: https://github.com/FiscalNote/BillSum
 * XLSum: https://github.com/csebuetnlp/xl-sum
