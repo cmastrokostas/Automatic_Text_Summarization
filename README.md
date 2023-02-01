@@ -3,7 +3,7 @@ This repository hosts code for my thesis on "Text Summarization on English and M
 
 
 ## Datasets
-Details about the datasets used in the survey can be found [here](https://github.com/cmastrokostas/Unsupervised_Text_Summarization_Survey/tree/main/Dataset%20Preparation).
+Details about the datasets used in the survey can be found [here](https://github.com/cmastrokostas/Automatic_Text_Summarization_Survey/tree/main/Dataset%20Preparation).
 
 ## Results
 Configure `SumSurvey\config.py` and run `main.py`.
