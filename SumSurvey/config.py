@@ -5,7 +5,7 @@ from sumy.summarizers.text_rank import TextRankSummarizer
 from datasets import load_metric
 
 # Set each time,to get results for the desired dataset. For example 'D:\datasets\cnn_dailymail'
-dataset_path = r'C:\Users\xary_\source\repos\Unsupervised_Text_Summarization_Survey\MultiLingPilot2013'
+dataset_path = r'C:\Users\xary_\source\repos\XLSum'
 
 # Set where you want your results to be saved.
 results_path = r'C:\Users\xary_\source\repos\Unsupervised_Text_Summarization_Survey\Results' 
@@ -47,7 +47,9 @@ abstractive_models = {
     "bart-large-xsum": "facebook/bart-large-xsum",
     "pegasus-large": "google/pegasus-large",
     "pegasus-multi_news": "google/pegasus-multi_news",
-    "pegasus-xsum": "google/pegasus-xsum"
+    "pegasus-xsum": "google/pegasus-xsum",
+    "pegasus-cnn_dailymail": "google/pegasus-cnn_dailymail",
+    "bart-large-cnn-samsum": "philschmid/bart-large-cnn-samsum"
 }
 
 greek_abstractive_models = {

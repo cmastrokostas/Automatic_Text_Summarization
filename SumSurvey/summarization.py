@@ -115,7 +115,7 @@ def evaluation(language, lang_path, dataset): # Evaluation
     dirpath = os.path.join(dataset_path, lang_path, "produced")
     sumpath = os.path.join(dataset_path, lang_path, "summary")
 
-    scorers = ['rouge1', 'rouge2', 'rougeL', 'rougeLsum', 'bleu-1', 'bleu-2', 'sacrebleu'] 
+    scorers = ['rouge1', 'rouge2', 'rougeL', 'rougeLsum','bleu-1', 'bleu-2', 'sacrebleu'] 
     
     #Init Greek Rouge and gr_tokenizer
     gr_tokenizer = Tokenizer('greek')._get_word_tokenizer('greek')
@@ -139,7 +139,8 @@ def evaluation(language, lang_path, dataset): # Evaluation
                     open(os.path.join(sumpath, file.replace("baseline", "summary")), 'r', encoding = 'utf-8-sig', errors = 'ignore') as r:
                     hyp = h.read() if language == 'english' else prepare(h.read())
                     ref = r.read() if language == 'english' else prepare(r.read())
-                    method_score += score(hyp, ref, scorer, language, gr_rouge)
+                    if hyp and not hyp.isspace():
+                        method_score += score(hyp, ref, scorer, language, gr_rouge)
 
             data[dataset].append(method_score/len(files))
 
