@@ -86,7 +86,7 @@ def summarization(language, lang_path):
 def abstractive(text, model, model_name, tokenizer):
     device = "cuda:0" 
     model = model.to(device)
-    max_length = 512 if model_name == "pegasus-xsum" else 1024
+    max_length = 512 if model_name == "pegasus-xsum" or model_name == "mT5_multilingual_XLSum" else 1024
     input_ids = tokenizer(
         [text],
         return_tensors = "pt",
