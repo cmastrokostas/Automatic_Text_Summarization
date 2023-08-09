@@ -1,5 +1,6 @@
 # Text Summarization on English and Modern Greek Textual corpora
-This repository hosts code for my thesis on "Text Summarization on English and Modern Greek Textual corpora".
+This repository hosts code for my thesis on "Automatic Text Summarization in English and Greek Texts: A
+Literature Overview.".
 
 
 ## Datasets
